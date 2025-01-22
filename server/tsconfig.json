@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
+    "target": "es2017",
+    "module": "esnext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

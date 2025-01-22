@@ -1,36 +1,90 @@
-enum SuccessStatus {
-    OK = 200,
-    CREATED =201
+"use strict";
+
+import { Response } from "express";
+import { z } from "zod";
+
+type StatusCodeType = {
+  OK: 200;
+  CREATED: 201;
+};
+
+type ReasonStatusCodeType = {
+  OK: "Success";
+  CREATED: "Created!";
+};
+
+const StatusCode: StatusCodeType = {
+  OK: 200,
+  CREATED: 201,
+};
+
+const ReasonStatusCode: ReasonStatusCodeType = {
+  OK: "Success",
+  CREATED: "Created!",
+};
+
+interface SuccessResponseParams {
+  message?: string;
+  statusCode?: StatusCodeType[keyof StatusCodeType];
+  reasonStatusCode?: ReasonStatusCodeType[keyof ReasonStatusCodeType];
+  data?: Record<string, unknown>;
 }
 
-enum ReaonSuccessStatus {
-    OK = "OK",
-    CREATED = "Created"
+class SuccessResponse {
+  message: string;
+  status: number;
+  data: Record<string, unknown>;
+
+  constructor({
+    message,
+    statusCode = StatusCode.OK,
+    reasonStatusCode = ReasonStatusCode.OK,
+    data = {},
+  }: SuccessResponseParams) {
+    this.message = message || reasonStatusCode;
+    this.status = statusCode;
+    this.data = data;
+  }
+  send(res: Response) {
+    return res.status(this.status).json(this);
+  }
 }
 
-class SuccessReponse {
-
-    message: ReaonSuccessStatus;
-    statusCode: SuccessStatus;
-    constructor(message: ReaonSuccessStatus, statusCode: SuccessStatus) {
-        this.message = message;
-        this.statusCode = statusCode;
-    }
+interface OKParams {
+  message?: string;
+  data?: Record<string, unknown>;
 }
 
-class CreatedResponse extends SuccessReponse {
-    constructor(message: ReaonSuccessStatus = ReaonSuccessStatus.CREATED, statusCode: SuccessStatus = SuccessStatus.CREATED) {
-        super(message, statusCode);
-    }
+class OK extends SuccessResponse {
+  constructor({ message, data }: OKParams) {
+    super({ message, data });
+  }
 }
 
-class OkResponse extends SuccessReponse {
-    constructor(message: ReaonSuccessStatus = ReaonSuccessStatus.OK, statusCode: SuccessStatus = SuccessStatus.OK) {
-        super(message, statusCode);
-    }
+interface CREATEDParams extends SuccessResponseParams {
+  options?: Record<string, unknown>;
 }
 
-export default {
-    CreatedResponse,
-    OkResponse
+class CREATED extends SuccessResponse {
+  options: Record<string, unknown>;
+
+  constructor({
+    options = {},
+    message,
+    statusCode = StatusCode.CREATED,
+    reasonStatusCode = ReasonStatusCode.CREATED,
+    data,
+  }: CREATEDParams) {
+    super({ message, statusCode, reasonStatusCode, data });
+    this.options = options;
+  }
 }
+
+export const ServiceResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({
+    message: z.string(),
+    data: dataSchema.optional(),
+    status: z.number(),
+  });
+
+export { OK, CREATED, SuccessResponse };
