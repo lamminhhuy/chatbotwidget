@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "CommonJS",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true, 
     "moduleResolution": "Node",
     "outDir": "dist",
     "importsNotUsedAsValues": "remove",

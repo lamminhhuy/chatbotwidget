@@ -11,7 +11,6 @@ import {
   GenerativeModel,
   GoogleGenerativeAI,
   GenerateContentResult,
-  StartChatParams,
   Content,
 } from "@google/generative-ai";
 

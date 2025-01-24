@@ -1,13 +1,12 @@
 import { createClient, RedisClientType } from "redis";
-import config from "@/configs/database/config.redis";
+import { env } from "./envConfig";
 
 export class RedisClient {
   private static instance: RedisClient | null = null;
   private client: RedisClientType;
 
   private constructor() {
-    const { host, port } = config;
-    const redisURL = `redis://${host}:${port}`;
+    const redisURL = env.REDIS_URL;
 
     if (!redisURL) {
       throw new Error("Redis URL is not defined in the configuration.");
