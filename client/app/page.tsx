@@ -1,6 +1,12 @@
+'use client'
+import { useEffect } from "react"
 import ChatWidget from "../components/ChatWidget"
+import { deleteCookie } from 'cookies-next';
 
 export default function Home() {
+  useEffect(()=> {
+    deleteCookie('sessionId')
+  },[])
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <h1 className="text-4xl font-bold mb-8">Welcome to Huy's website!</h1>
