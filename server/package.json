@@ -70,6 +70,7 @@
   },
   "tsup": {
     "target": "esnext", 
+    "format": ["esm"],
     "entry": [
       "src",
       "!src/**/__tests__/**",
