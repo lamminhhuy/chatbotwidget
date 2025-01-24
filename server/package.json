@@ -6,7 +6,7 @@
   "repository": "edwinhern/express-typescript-2024",
   "license": "MIT",
   "main": "index.ts",
-  "private": true,
+"private": true,
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/main/index.ts | pino-pretty",
     "build": "tsup",
@@ -69,6 +69,7 @@
     ]
   },
   "tsup": {
+    "target": "esnext", 
     "entry": [
       "src",
       "!src/**/__tests__/**",
