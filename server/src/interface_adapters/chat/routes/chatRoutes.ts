@@ -10,8 +10,8 @@ import { RedisClient } from "@/shared/utils/redisClient";
 import asyncHandler from "@/shared/utils/asyncHandler";
 
 const chatRouter = Router();
-const redisInstance = await RedisClient.getInstance();
-const sessionStore = new RedisSessionStore(redisInstance.getClient());
+const redisClient = RedisClient.getInstance();
+const sessionStore = new RedisSessionStore(redisClient);
 const chatbotAPI = new GoogleGeminiAPI(env.GOOGLE_GEMINI_API_KEY);
 const handleUserQuery = new HandleUserQuery(chatbotAPI, sessionStore);
 const chatController = new ChatController(handleUserQuery);

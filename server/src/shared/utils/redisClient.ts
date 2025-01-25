@@ -2,41 +2,37 @@ import { createClient, RedisClientType } from "redis";
 import { env } from "./envConfig";
 
 export class RedisClient {
-  private static instance: RedisClient | null = null;
-  private client: RedisClientType;
+  private static instance: RedisClientType | null = null;
+  private static isConnected: boolean = false;
 
-  private constructor() {
-    const redisURL = env.REDIS_URL;
-
-    if (!redisURL) {
-      throw new Error("Redis URL is not defined in the configuration.");
-    }
-
-    this.client = createClient({ url: redisURL });
-    this.client.on("error", (e: Error) => {
-      console.error("Failed to create the Redis client:", e);
-    });
-  }
-
-  public static async getInstance(): Promise<RedisClient> {
+  public static getInstance(): RedisClientType {
     if (!RedisClient.instance) {
-      RedisClient.instance = new RedisClient();
-      await RedisClient.instance.connect();
+      if (!env.REDIS_URL) {
+        throw new Error("Redis URL is not defined in the configuration.");
+      }
+
+      RedisClient.instance = createClient({ url: env.REDIS_URL });
+
+      RedisClient.instance.on("ready", () => {
+        RedisClient.isConnected = true;
+        console.log("Connected to Redis successfully!");
+      });
+
+      RedisClient.instance.on("error", (error) => {
+        RedisClient.isConnected = false;
+        console.error("Redis connection error:", error);
+      });
+
+      RedisClient.instance.connect().catch((error) => {
+        RedisClient.isConnected = false;
+        console.error("Failed to connect to Redis:", error);
+      });
     }
+
     return RedisClient.instance;
   }
 
-  private async connect(): Promise<void> {
-    try {
-      await this.client.connect();
-      console.log("Connected to Redis successfully!");
-    } catch (e) {
-      console.error("Connection to Redis failed:", e);
-      throw e;
-    }
-  }
-
-  public getClient(): RedisClientType {
-    return this.client;
+  public static isConnectedToRedis(): boolean {
+    return RedisClient.isConnected;
   }
 }
