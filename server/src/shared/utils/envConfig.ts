@@ -11,6 +11,9 @@ export const env = cleanEnv(process.env, {
   REDIS_URL: str({
     default: "redis://chatbot-redis:6379", 
   }),
+  CORS_ALLOWED_ORIGINS: str({
+    default: 'http://localhost:3000'
+  }),
   GOOGLE_GEMINI_API_KEY: str(),
   HOST: host({
     default: "localhost",

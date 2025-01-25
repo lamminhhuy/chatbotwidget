@@ -7,6 +7,7 @@ import { errorHandler } from "@/shared/middlewares/error/errorHanlder";
 import chatRouter from "@/interface_adapters/chat/routes/chatRoutes";
 import cookieParser from "cookie-parser";
 import  morgan  from 'morgan';
+import { env } from "@/shared/utils/envConfig";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: env.CORS_ALLOWED_ORIGINS,
       credentials: true, 
     })
   );
