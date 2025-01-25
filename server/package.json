@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/main/index.ts | pino-pretty",
     "build": "tsup",
-    "start": "node dist/main/index.js",
+    "start": "node dist/main/index.cjs",
     "clean": "rimraf dist coverage",
     "lint": "biome check src/",
     "lint:fix": "biome check src/ --fix",
@@ -70,7 +70,7 @@
   },
   "tsup": {
     "target": "esnext", 
-    "format": ["esm"],
+    "format": ["cjs"],
     "entry": [
       "src",
       "!src/**/__tests__/**",
