@@ -25,8 +25,8 @@ export default function ChatBubble({ message }: ChatBubbleProps) {
         <div
           className={`max-w-[75%] rounded-lg p-3 ${isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}
         >
-          <p>{message.content}</p>
-        </div>
+       <p className="whitespace-pre-wrap">{message.content}</p>
+      </div>
       </div>
     </motion.div>
   )

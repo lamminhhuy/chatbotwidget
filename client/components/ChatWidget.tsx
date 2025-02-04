@@ -1,37 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import ChatBubble from "./ChatBubble"
-import ChatInput from "./ChatInput"
-import ToggleButton from "./ToggleButton"
-import { Role, ViewMessage } from "../types/chat"
-import { sendMessage, createUserMessage } from "../services/api"
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import ChatBubble from "./ChatBubble";
+import ChatInput from "./ChatInput";
+import ToggleButton from "./ToggleButton";
+import { Prompt, Role, ViewMessage } from "../types/chat";
+import { sendMessage, createUserMessage, fetchPrompts } from "../services/api";
 
 export default function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState<ViewMessage[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<ViewMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
 
-  const toggleChat = () => setIsOpen(!isOpen)
+  const toggleChat = () => setIsOpen(!isOpen);
 
   const handleSendMessage = async (content: string) => {
-    if (content.trim() === "") return
+    if (content.trim() === "") return;
 
-    const userMessage = createUserMessage(content, { role: Role.User })
-    setMessages((prevMessages) => [...prevMessages, userMessage])
+    const userMessage = createUserMessage(content, { role: Role.User });
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const botReply = await sendMessage(content)
-      setMessages((prevMessages) => [...prevMessages, botReply])
+      const botReply = await sendMessage(content);
+      setMessages((prevMessages) => [...prevMessages, botReply]);
     } catch (error) {
-      console.error("Failed to send message:", error)
-      // Optionally, add an error message to the chat
+      console.error("Failed to send message:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
+  useEffect(() => {
+    const fetchPromptHandler = async () => {
+      try {
+        const data = await fetchPrompts();
+        setPrompts(data); 
+      } catch (error) {
+        console.error("Error fetching prompts:", error);
+      }
+    };
+    
+    fetchPromptHandler();
+  }, []);
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -41,9 +54,9 @@ export default function ChatWidget() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="bg-white rounded-lg shadow-lg w-80 sm:w-96 h-[500px] flex flex-col"
+            className="bg-white rounded-lg shadow-lg md:w-[400px] sm:w-96 h-[500px] flex flex-col"
           >
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 relative">
               {messages.map((message: ViewMessage) => (
                 <ChatBubble key={message.id} message={message} />
               ))}
@@ -52,6 +65,21 @@ export default function ChatWidget() {
                   <span className="animate-pulse">Bot is typing...</span>
                 </div>
               )}
+                  {messages.length === 0  &&   <div className="absolute bottom-0 left-0 w-full p-4 bg-gray-100 rounded-t-lg">
+       
+                <h3 className="text-sm font-semibold mb-2">Suggested Prompts:</h3>
+                <div className="flex flex-wrap gap-2">
+                 { prompts.map((prompt, index) => (
+                    <button
+                      key={index}
+                      className="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition"
+                      onClick={() => handleSendMessage(prompt.text)}
+                    >
+                      {prompt.text}
+                    </button>
+                  ))}
+                </div>
+              </div>}
             </div>
             <ChatInput handleSendMessage={handleSendMessage} isLoading={isLoading} />
           </motion.div>
@@ -59,6 +87,5 @@ export default function ChatWidget() {
       </AnimatePresence>
       <ToggleButton isOpen={isOpen} toggleChat={toggleChat} />
     </div>
-  )
+  );
 }
-

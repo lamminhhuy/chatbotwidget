@@ -1,9 +1,13 @@
 import { BASE_URL } from "@/contants/common";
-import type { Author, BaseMessageSchema, ViewMessage } from "../types/chat"
+import type { Author, Prompt, ViewMessage } from "../types/chat"
 import axios from 'axios';
 
 
+export async function fetchPrompts(): Promise<Prompt[]> {
 
+  const {data: {data}} = await axios.get<{data :{prompts:Prompt[]}}>(`${BASE_URL}/api/v1/prompt`)
+  return data.prompts
+}
 
 export async function sendMessage(content: string): Promise<ViewMessage> {
 

@@ -11,7 +11,7 @@ export default function ToggleButton({ isOpen, toggleChat }: ToggleButtonProps) 
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       onClick={toggleChat}
-      className="bg-blue-500 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center"
+      className="bg-blue-500 text-white w-12 h-12 mt-2 rounded-full shadow-lg flex items-center justify-center"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
         {isOpen ? (

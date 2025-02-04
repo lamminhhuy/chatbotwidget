@@ -19,4 +19,11 @@ export interface ViewMessage extends BaseMessageSchema {
   id: string
 }
 
- 
+export interface Prompt {
+  text: string,
+  category: string
+}
+ export  interface QA {
+   question: string
+   answer: string
+ }
