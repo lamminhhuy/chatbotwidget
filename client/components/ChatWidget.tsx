@@ -54,7 +54,7 @@ export default function ChatWidget() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="bg-white rounded-lg shadow-lg md:w-[400px] sm:w-96 h-[500px] flex flex-col"
+            className="bg-white rounded-lg shadow-lg lg:w-[400px] sm:w-96 h-[500px] flex flex-col"
           >
             <div className="flex-1 overflow-y-auto p-4 space-y-4 relative">
               {messages.map((message: ViewMessage) => (
