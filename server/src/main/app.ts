@@ -7,7 +7,9 @@ import { errorHandler } from "@/shared/middlewares/error/errorHanlder";
 import chatRouter from "@/interface_adapters/chat/routes/chatRoutes";
 import cookieParser from "cookie-parser";
 import  morgan  from 'morgan';
-import { env } from "@/shared/utils/envConfig";
+import { env } from "@/configs/envConfig";
+import promptRouter from "@/interface_adapters/prompt/routes/promptRoutes";
+
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -26,7 +28,10 @@ app.use(
 app.use(helmet());
 app.use(rateLimiter);
 
-app.use(`/api/v1`, chatRouter);
+import("@/shared/utils/MongoDB");
+
+app.use(`/api/v1/chat`, chatRouter);
+app.use(`/api/v1/prompt`, promptRouter);
 
 app.use(errorHandler);
 

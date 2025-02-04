@@ -1,5 +1,6 @@
 import { Message } from "@/domain/entities/Message";
 
-export interface ChatbotAPI {
+export interface IChatbotAPI {
   generateResponse(userInput: string, messages: Message[]): Promise<Message>;
+  generateEmbedding(text: string): Promise<number[]>;
 }

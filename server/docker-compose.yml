@@ -9,12 +9,14 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - PORT:5001
+      - PORT=5001
       - NODE_ENV=dev
       - REDIS_HOST=chatbot-redis
-      - REDIS_PORT=6379        
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://chatbot-mongo:27017/chatbotdb?retryWrites=true&w=majority
     depends_on:
-      - chatbot-redis          
+      - chatbot-redis
+      - chatbot-mongo
     volumes:
       - ./:/app            
       - /app/node_modules
@@ -27,8 +29,37 @@ services:
     ports:
       - "6379:6379"          
     networks:
-      - app-network       
+      - app-network 
 
+  chatbot-mongo:
+    image: mongo:latest
+    container_name: chatbot-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - chatbot-mongo-data:/data/db
+    command: mongod --setParameter enableTestCommands=1
+  chatbot-mongo-express:
+    image: mongo-express
+    container_name: chatbot-mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=chatbot-mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      - chatbot-mongo
+    networks:
+      - app-network 
 networks:
   app-network:
-    driver: bridge            
+    driver: bridge
+
+volumes:
+  chatbot-mongo-data:

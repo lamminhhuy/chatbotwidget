@@ -1,4 +1,4 @@
-import { ChatbotAPI } from "@/application/interfaces/ChatBotAPI";
+import { IChatbotAPI } from "@/application/interfaces/IChatBotAPI";
 import { Author } from "@/domain/entities/Author";
 import { Message } from "@/domain/entities/Message";
 import { Role } from "@/domain/enums/Role";
@@ -14,13 +14,19 @@ import {
   Content,
 } from "@google/generative-ai";
 
-export class GoogleGeminiAPI implements ChatbotAPI {
+export class GoogleGeminiAPI implements IChatbotAPI {
   private genAI: GoogleGenerativeAI;
   private model: GenerativeModel;
 
   constructor(private readonly apiKey: string) {
     this.genAI = new GoogleGenerativeAI(this.apiKey);
     this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  }
+
+  async generateEmbedding(text: string): Promise<number[]> {
+    const model = this.genAI.getGenerativeModel({ model: "text-embedding-004" });
+    const result = await model.embedContent(text);
+    return result.embedding.values;
   }
 
   async generateResponse(

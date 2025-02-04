@@ -3,26 +3,37 @@ import { Role } from "@/domain/enums/Role";
 import { Session } from "@/domain/entities/Session";
 import { Message } from "@/domain/entities/Message";
 import { Author } from "@/domain/entities/Author";
-import { ChatbotAPI } from "@/application/interfaces/ChatBotAPI";
-import { SessionStore } from "@/application/interfaces/SessionStore";
 import { HandleUserQuery } from "../HandleUserQuery";
+import { VectorService } from "@/application/services/VectorService";
+import { IChatbotAPI } from "@/application/interfaces/IChatBotAPI";
+import { ISessionStore } from "@/application/interfaces/ISessionStore";
+
+class MockVectorService extends VectorService {
+  constructor() {
+    super({} as any, {} as any);
+  }
+
+  findBestMatch = vi.fn(); 
+}
 
 describe("HandleUserQuery", () => {
-  let mockChatbotAPI: ChatbotAPI;
-  let mockSessionStore: SessionStore;
+  let mockChatbotAPI: IChatbotAPI;
+  let mockSessionStore: ISessionStore;
   let handleUserQuery: HandleUserQuery;
-
+  let mockVectorService: VectorService
   beforeEach(() => {
     mockChatbotAPI = {
+      generateEmbedding: vi.fn() as Mock, 
       generateResponse: vi.fn() as Mock, 
     };
-
+  
     mockSessionStore = {
       getSession: vi.fn() as Mock,
       saveSession: vi.fn() as Mock,
     };
-
-    handleUserQuery = new HandleUserQuery(mockChatbotAPI, mockSessionStore);
+  
+    mockVectorService = new MockVectorService();
+    handleUserQuery = new HandleUserQuery(mockChatbotAPI, mockSessionStore,mockVectorService);
   });
 
   it("should create a new session if no existing session is found", async () => {

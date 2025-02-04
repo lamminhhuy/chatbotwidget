@@ -8,8 +8,11 @@ export const env = cleanEnv(process.env, {
     default: "dev",
     choices: ["dev", "pro", "test"],
   }),
+  MONGO_URI: str({
+    default: "mongodb://chatbot-mongo:27017/chatbotdb"
+  }),
   REDIS_URL: str({
-    default: "redis://chatbot-redis:6379", 
+    default: "redis://localhost:6379", 
   }),
   GOOGLE_GEMINI_API_KEY: str(),
   HOST: host({
