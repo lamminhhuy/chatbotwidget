@@ -1,5 +1,5 @@
 import { createClient, RedisClientType } from "redis";
-import { env } from "./envConfig";
+import { env } from "../../configs/envConfig";
 
 export class RedisClient {
   private static instance: RedisClientType | null = null;
@@ -36,3 +36,5 @@ export class RedisClient {
     return RedisClient.isConnected;
   }
 }
+
+export const redisInstance = RedisClient.getInstance()

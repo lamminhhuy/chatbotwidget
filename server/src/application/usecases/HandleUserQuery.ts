@@ -1,22 +1,31 @@
 import { Session } from "@/domain/entities/Session";
-import { ChatbotAPI } from "../interfaces/ChatBotAPI";
-import { SessionStore } from "../interfaces/SessionStore";
+import { IChatbotAPI } from "../interfaces/IChatBotAPI";
+import { ISessionStore } from "../interfaces/ISessionStore";
 import { Author } from "@/domain/entities/Author";
 import { Role } from "@/domain/enums/Role";
 import { Message } from "@/domain/entities/Message";
+import { VectorService } from "../services/VectorService";
 
 export class HandleUserQuery {
   constructor(
-    private chatbotAPI: ChatbotAPI,
-    private sessionStore: SessionStore
+    private chatbotAPI: IChatbotAPI,
+    private sessionStore: ISessionStore,
+    private vectorService: VectorService
   ) {}
 
   async execute(sessionId: string, content: string) {
-    const session = await this.getOrCreateSession(sessionId);
-    const userMessage = this.createMessage(content, Role.User);
-    const responseMessage = await this.generateChatbotResponse(session, userMessage);
 
+    const session = await this.getOrCreateSession(sessionId);
+    const relevantInfo = await this.retrieveRelevantInformation(content)
+
+    const augmentedQuery = relevantInfo
+    ? `User Query: ${content}\n\nContext:\n${relevantInfo}`
+    : content;
+
+    const userMessage = this.createMessage(augmentedQuery, Role.User);
     session.addMessage(userMessage);
+
+    const responseMessage = await this.chatbotAPI.generateResponse(userMessage.content, session.messages);
     session.addMessage(responseMessage);
 
     await this.sessionStore.saveSession(session.id, session);
@@ -33,7 +42,8 @@ export class HandleUserQuery {
     return new Message(new Author(role, null, null), content);
   }
 
-  private async generateChatbotResponse(session: Session, userMessage: Message): Promise<Message> {
-    return this.chatbotAPI.generateResponse(userMessage.content, session.messages);
+  private async retrieveRelevantInformation(content: string): Promise<string | null> {
+    const bestMatch = await this.vectorService.findBestMatch(content);
+    return bestMatch ? `${bestMatch.question}: ${bestMatch.answer}` : null;
   }
 }

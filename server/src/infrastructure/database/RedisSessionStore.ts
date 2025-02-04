@@ -1,9 +1,9 @@
 // src/infrastructure/RedisSessionStore.ts
 
-import { SessionStore } from "@/application/interfaces/SessionStore";
+import { ISessionStore } from "@/application/interfaces/ISessionStore";
 import { Session } from "@/domain/entities/Session";
 import { RedisClientType } from "redis";
-export class RedisSessionStore implements SessionStore {
+export class RedisSessionStore implements ISessionStore {
   private client;
   constructor(client: RedisClientType) {
     this.client = client;
