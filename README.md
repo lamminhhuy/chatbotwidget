@@ -1,16 +1,21 @@
-Chatbot Widget with RAG.
+Project: Chatbot Widget with RAG.
 
-link demo: https://chatbotwidget-phi.vercel.app/
+Main features: A chatbot with RAG using the Google Gemini API and Atlas Vector Search.
 
-This project uses the Google Gemini API and Docker Compose for easy setup and execution.
+Link demo: https://chatbotwidget-phi.vercel.app/
 
 Requirements
 
 Before running the project, ensure you have installed:
-Docker
+Nodejs,
+Yarn,
+Docker,
 Docker Compose
-Running the Project
 
+Running the frontend
+using: yarn dev
+
+Running the backend
 1. Add Google Gemini API Key
 You need a Google Gemini API Key to use the service. Follow these steps:
 Create a .env file in the project's root directory and add the API Key:
@@ -22,8 +27,6 @@ docker compose build
 After building, run the project using:
 docker compose up
 
-
-If you want to contribute to the project, please create a Pull Request or open an Issue on GitHub.
 
 License
 
