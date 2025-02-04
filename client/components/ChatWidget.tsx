@@ -18,21 +18,29 @@ export default function ChatWidget() {
 
   const handleSendMessage = async (content: string) => {
     if (content.trim() === "") return;
-
+  
     const userMessage = createUserMessage(content, { role: Role.User });
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-
+  
     setIsLoading(true);
+  
+    const timeoutId = setTimeout(() => {
+      alert(
+        "This service is hosted on a free third-party provider, which may cause request delays of 50 seconds or more."
+      );
+    }, 7000);
+  
     try {
       const botReply = await sendMessage(content);
+      clearTimeout(timeoutId); 
       setMessages((prevMessages) => [...prevMessages, botReply]);
     } catch (error) {
+      clearTimeout(timeoutId);
       console.error("Failed to send message:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     const fetchPromptHandler = async () => {
       try {
