@@ -1,4 +1,7 @@
 import { useState, type FormEvent } from "react"
+import { Button } from "./ui/button"
+import { Send } from "lucide-react"
+import { Input } from "./ui/input"
 
 interface ChatInputProps {
   handleSendMessage: (content: string) => void
@@ -18,22 +21,18 @@ export default function ChatInput({ handleSendMessage, isLoading }: ChatInputPro
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border-t">
-      <div className="flex items-center">
-        <input
+      <div className="flex items-center gap-2">
+        <Input
           type="text"
+          color="#00000"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your message..."
-          className="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={isLoading}
         />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition-colors disabled:bg-blue-300"
-          disabled={isLoading}
-        >
-          Send
-        </button>
+        <Button type="submit"className="bg-blue-800 hover:bg-blue-400" size="icon">
+                    <Send className="h-4 w-4" />
+                  </Button>
       </div>
     </form>
   )
