@@ -18,12 +18,13 @@ export default function ChatWidget() {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const toggleChat = async () => { 
     setIsOpen(!isOpen)
-    const timeoutId = setTimeout(() => {
-      alert("This service is hosted on a free third-party provider, which may cause request delays of 50 seconds or more.");
-    }, 6000);
 
     if(!isOpen)
     {
+      const timeoutId = setTimeout(() => {
+        alert("This service is hosted on a free third-party provider, which may cause request delays of 50 seconds or more.");
+      }, 6000);
+
     try {
       setIsPromptLoading(true)
       const data = await fetchPrompts();
