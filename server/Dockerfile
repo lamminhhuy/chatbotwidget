@@ -4,9 +4,12 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
+
+COPY . .
+
+RUN yarn build
 
 EXPOSE 5001
 
-CMD ["yarn", "tsx", "src/main/index.ts"]
-
+CMD ["node", "dist/main/index.cjs"]
