@@ -3,7 +3,7 @@ import QAVectorModel from "../models/QAVector";
 import { PipelineStage } from "mongoose";
 
 export class VectorRepositoryImpl implements IVectorRepository {
-    async findSimilarQuestions (queryVector: number[]){
+    async findSimilarQuestions (queryVector: number[]) {
         const agg = [
             {
               '$vectorSearch': {
@@ -25,6 +25,10 @@ export class VectorRepositoryImpl implements IVectorRepository {
             }
           ];
           const result = await QAVectorModel.aggregate(agg as PipelineStage[]);
+          if(result[0].score > 0.9)
+          {
           return result[0]
+          }
+          return null
         }
 }
