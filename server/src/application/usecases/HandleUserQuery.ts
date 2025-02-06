@@ -19,7 +19,8 @@ export class HandleUserQuery {
     const relevantInfo = await this.retrieveRelevantInformation(content)
 
     const augmentedQuery = relevantInfo
-    ? `User Query: ${content}\n\nContext:\n${relevantInfo}`
+    ? `You are an expert AI. I have the following information: ${relevantInfo}.\n Question: ${content}.\n 
+    Please provide a concise and accurate answer based on the information above.`
     : content;
 
     const userMessage = this.createMessage(augmentedQuery, Role.User);
@@ -44,6 +45,6 @@ export class HandleUserQuery {
 
   private async retrieveRelevantInformation(content: string): Promise<string | null> {
     const bestMatch = await this.vectorService.findBestMatch(content);
-    return bestMatch ? `${bestMatch.question}: ${bestMatch.answer}` : null;
+    return bestMatch ? bestMatch.answer : null;
   }
 }
