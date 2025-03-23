@@ -10,7 +10,7 @@ export enum Role {
 }
 
 export interface BaseMessageSchema {
-  author: Author
+  author: Role
   content: string
   metadata: Record<any,any> | null
 }
