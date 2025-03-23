@@ -1,4 +1,4 @@
-import { ViewMessage } from "@/types/chat"
+import { Role, ViewMessage } from "@/types/chat"
 import { motion } from "framer-motion"
 
 interface ChatBubbleProps {
@@ -6,7 +6,7 @@ interface ChatBubbleProps {
 }
 
 export default function ChatBubble({ message }: ChatBubbleProps) {
-  const isUser = message.author.role === "user"
+  const isUser = message.author === Role.User
 
   return (
     <motion.div
@@ -18,7 +18,7 @@ export default function ChatBubble({ message }: ChatBubbleProps) {
         {!isUser && (
           <img
             src={"/banner.png"}
-            alt={message.author.name}
+            alt={message.id}
             className="w-8 h-8 rounded-full object-contain"
           />
         )}

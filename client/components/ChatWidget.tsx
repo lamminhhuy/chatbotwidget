@@ -36,15 +36,14 @@ export default function ChatWidget() {
   const handleSendMessage = async (content: string) => {
     if (content.trim() === "") return;
     
-    const userMessage = createUserMessage(content,   Role.User);
+    const userMessage = createUserMessage(content,  Role.User);
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setIsLoading(true);
-
-
     try {
       const botReply: string = await sendMessage(content);
       setMessages((prevMessages) => [
         ...prevMessages,
+        userMessage,
         {
           id: `bot-${Date.now()}`,
           author: Role.Assistant,
@@ -69,7 +68,7 @@ export default function ChatWidget() {
           <span className="animate-pulse">Bot is typing...</span>
         </div>
       )}
-      {messages.length === 0 && renderSuggestedPrompts()}
+   
     </div>
   );
 
