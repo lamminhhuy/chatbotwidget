@@ -40,8 +40,7 @@ export default function Home() {
   }, [])
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-24 py-12">
-    <h1 className="text-2xl font-bold mb-4">OWASP Q&A and Information</h1>
-      <CSVDisplay content={parsedContent} isLoading={isLoading} />
+    <h1 className="text-2xl font-bold mb-4">Chatbot Testing</h1>
       <ChatWidget />
     </main>
   )

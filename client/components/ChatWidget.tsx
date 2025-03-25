@@ -96,7 +96,7 @@ export default function ChatWidget() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="bg-white rounded-lg shadow-lg lg:w-[600px] sm:w-96 h-[500px] flex flex-col"
+            className="bg-white rounded-lg shadow-lg lg:w-[550px] sm:w-96 h-[500px] flex flex-col"
           >
             {renderChatMessages()}
             <ChatInput handleSendMessage={handleSendMessage} isLoading={isLoading} />
