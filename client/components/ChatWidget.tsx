@@ -43,7 +43,6 @@ export default function ChatWidget() {
       const botReply: string = await sendMessage(content);
       setMessages((prevMessages) => [
         ...prevMessages,
-        userMessage,
         {
           id: `bot-${Date.now()}`,
           author: Role.Assistant,
