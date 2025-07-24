@@ -2,8 +2,6 @@ Project: Chatbot Widget with RAG.
 
 Main features: A chatbot with RAG using the Google Gemini API and Atlas Vector Search.
 
-Link demo: https://chatbotwidget-phi.vercel.app/
-
 Requirements
 
 Before running the project, ensure you have installed:
